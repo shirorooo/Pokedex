@@ -1,0 +1,24 @@
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.logo img {
+  width: 150px;
+}
+
+.sub-menu {
+  display: block;
+  margin-left: auto;
+  margin-right: 5%;
+}
+
+.sub-menu a {
+  font-size: 17px;
+  font-weight: 300;
+  margin-left: 30px;
+}
