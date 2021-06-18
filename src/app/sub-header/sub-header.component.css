@@ -1,0 +1,37 @@
+mat-card {
+  display: flex;
+  position: fixed;
+  z-index: 5;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.734);
+}
+
+h1 {
+  color: rgb(255, 255, 89);
+  font-size: 30px;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  display: block;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+a:hover {
+  cursor: pointer;
+  color: rgb(255, 255, 89);
+  transform: translate(5px, -5px);
+  transition: 0.4s;
+}
+
+.pokemon {
+  margin-left: 13%;
+}
+
+.items {
+  margin-left: 5%;
+}

@@ -3,7 +3,14 @@
     <img src="../../assets/pokemon logo.png" alt="" />
   </a>
   <div class="sub-menu">
-    <a routerLink="pokemon-list">Pokemon</a>
-    <a routerLink="item-list">Items</a>
+    <a (click)="subMenuToggle()">Pokemon</a>
+    <a (click)="subMenuToggle()">Items</a>
   </div>
 </mat-toolbar>
+
+<div [@popOverState]="stateName">
+  <app-sub-header
+    [subMenuToggle]="subMenuClicked"
+    (subMenuIsHidden)="subMenuToggle()"
+  ></app-sub-header>
+</div>
