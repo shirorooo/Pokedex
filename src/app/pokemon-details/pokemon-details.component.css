@@ -1,0 +1,184 @@
+.pokemon {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  margin-top: 50px;
+}
+
+mat-card {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.231);
+}
+
+.pokemon-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.primary-details {
+  display: block;
+  width: 50%;
+}
+
+.secondary-details {
+  display: block;
+  width: 50%;
+}
+
+.secondary-details .pokemon-info{
+  text-align: left;
+  font-size: 14px;
+}
+
+.secondary-details .flavor{
+  margin-bottom: 30px;
+  color: white;
+}
+
+.secondary-details .flavor-description{
+  font-size: large;
+  font-weight: 500;
+  color: rgb(236, 238, 95);
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+}
+
+p {
+  text-align: center;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  font-size: large;
+  color: white;
+}
+
+.pokemon-name {
+  margin-top: 10px;
+}
+
+.pokemon-type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokemon-type p {
+  width: 60px;
+  border-radius: 20px;
+  text-align: center;
+  margin-left: 10px;
+  font-size: small;
+}
+
+.poke-stat{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+.stats{
+  display: grid;
+  grid-template-columns: 45% 55%;
+}
+
+label{
+  color: white;
+  text-transform: capitalize;
+  letter-spacing: 2px;
+}
+
+
+mat-progress-bar{
+  border: 1px solid rgba(0, 0, 0, 0.217);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  height: 4px;
+  border-radius: 20px;
+  margin: 10px;
+}
+
+.sub-info{
+  margin-top: 10px;
+}
+
+.pokemon-moves-card{
+  width: 100px;
+  transform: translateY(0%);
+  transition: .3s ease-in-out;
+}
+
+.pokemon-moves-card:hover{
+  cursor: pointer;
+  background-color: rgba(186, 186, 186, 0.258);
+  transform: translateY(-10%);
+  z-index: 3;
+  width: 500px;
+  transition: .3s ease-in-out;
+}
+
+.pokemon-move{
+  font-size: 12px;
+  margin: 0;
+}
+
+.move-type{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid;
+  width: 60px;
+  border-radius: 20px;
+}
+
+.move-type p{
+  text-align: center;
+}
+
+.pokemon-stats{
+  margin-bottom: 20px;
+}
+
+.pokemon-moves{
+  margin-top: 30px;
+}
+
+
+
+@media screen and (max-width: 990px) {
+
+  .pokemon-data {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .primary-details {
+    width: 100%;
+  }
+
+  .secondary-details {
+    width: 100%;
+  }
+
+  .divider {
+    border-top: 3px solid rgba(211, 211, 211, 0.183);
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+}
+
+
+@media screen and (max-width: 600px) {
+  .poke-stat-label{
+    font-size: 10px;
+  }
+}

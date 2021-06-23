@@ -1,0 +1,73 @@
+<div class="pokemon">
+  <mat-card>
+    <div class="pokemon-data">
+      <div class="primary-details">
+        <div *ngIf="pokemon.sprites.other['official-artwork'].front_default !== null; else nullImage">
+          <img
+          src="{{ pokemon.sprites.other['official-artwork'].front_default }}"
+          alt=""
+        />
+        </div>
+        <ng-template #nullImage>
+          <div class="noImage">
+            <img mat-card-image src="../../assets/PokedexLogo.png" />
+          </div>
+        </ng-template>
+        <p class="pokemon-name">{{ pokemon.name }}</p>
+        <div class="pokemon-type">
+          <div *ngFor="let type of pokemon.types">
+            <p [style.backgroundColor]="typeColor(type.type.name)">{{ type.type.name }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="secondary-details">
+        <label for=".flavor" class="flavor-description">Description:</label>
+        <p class="pokemon-info flavor">{{ pokemonSpecies.flavor_text_entries[8].flavor_text }}</p>
+        <p class="pokemon-info">Height: {{ pokemon.height}}</p>
+        <p class="pokemon-info">Weight: {{ pokemon.weight}}</p>
+        <p class="pokemon-info">Capture Rate: {{ pokemonSpecies.capture_rate }}%</p>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="sub-info">
+
+    <img class="pokemon-stats" src="../../assets/Stats.png">
+    <div class="poke-stat">
+      <div *ngFor="let stat of pokemon.stats">
+        <div class="stats">
+          <label class="poke-stat-label" for="pokemon-stat">{{ stat.stat.name }}: {{ stat.base_stat }}</label>
+          <mat-progress-bar class="pokemon-stat" mode="determinate" [value]="stat.base_stat">
+          </mat-progress-bar>
+        </div>
+      </div>
+    </div>
+
+
+    <img class="pokemon-moves" src="../../assets/Moves.png">
+    <div class="poke-moves">
+      <mat-grid-list [cols]="column" rowHeight="120px">
+        <div *ngFor="let move of pokemonMoves">
+          <mat-grid-tile>
+            <mat-card class="pokemon-moves-card">
+              <mat-card-title>
+                <p class="pokemon-move">{{ move.name }}</p>
+              </mat-card-title>
+              <mat-card-subtitle class="move-type" [style.backgroundColor]="typeColor(move.type.name)">
+                <p class="pokemon-move">{{ move.type.name }}</p>
+              </mat-card-subtitle>
+              <mat-progress-bar mode="determinate" [value]="move.power">
+              </mat-progress-bar>
+            </mat-card>
+            
+          </mat-grid-tile>
+        </div>
+      </mat-grid-list>
+    </div>
+  </mat-card>
+</div>
+
+

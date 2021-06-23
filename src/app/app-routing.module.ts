@@ -4,11 +4,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { PokemonListComponent } from './pokemon-list/pokemon-list.component';
 import { ItemListComponent } from './item-list/item-list.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.component';
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
   {path: 'pokemon-list', component: PokemonListComponent},
-  {path: 'item-list', component: ItemListComponent}
+  {path: 'pokemon-details/:id', component: PokemonDetailsComponent},
+  {path: 'item-list', component: ItemListComponent},
+  {path: '**', component: PageNotFoundComponent,}
 ];
 
 @NgModule({
@@ -20,5 +24,7 @@ export class AppRoutingModule { }
 export const RoutingComponents = [
   LandingPageComponent, 
   PokemonListComponent, 
-  ItemListComponent
+  ItemListComponent,
+  PageNotFoundComponent,
+  PokemonDetailsComponent,
 ];

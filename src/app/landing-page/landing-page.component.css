@@ -1,15 +1,5 @@
-.pokemon {
-  width: 250px;
-  margin: 30px;
-}
-
-#top-pokemon {
-  position: fixed;
-  left: 0;
-}
-
 #pokedex {
-  width: 500px;
+  width: 600px;
   margin-top: 100px;
   display: block;
   margin-left: auto;
@@ -23,28 +13,18 @@
   transition: 0.6s ease-in-out;
 }
 
-#bottom-pokemon {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
-
 /* TABLET */
 @media screen and (max-width: 990px) {
-  .pokemon {
-    width: 170px;
-  }
-
   #pokedex {
     margin-top: 190px;
-    width: 300px;
+    width: 400px;
   }
 }
 
 /* PHONE */
 @media screen and (max-width: 580px) {
-  .pokemon {
-    width: 150px;
-    margin: 5px;
+  #pokedex {
+    margin-top: 190px;
+    width: 300px;
   }
 }

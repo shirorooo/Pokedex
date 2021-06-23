@@ -1,1 +1,79 @@
-<p>pokemon-list works!</p>
+<!-- TOOLBAR -->
+<mat-card class="top-bar-menu">
+  <div class="top-menu">
+    <div class="pagination">
+      <pagination-controls
+        class="paginator"
+        [responsive]="true"
+        (pageChange)="
+          currentPage = $event;
+          currentOffset = 20;
+          pokemonDetails = [];
+          getListOfPokemons()
+        "
+      ></pagination-controls>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" />
+    </div>
+  </div>
+</mat-card>
+
+<!-- CARDS -->
+<div class="pokemon-list">
+  <img class="pokemon-title" src="../../assets/pokemon-list-logo.png" alt="" />
+  <div class="container">
+    <mat-grid-list [cols]="column" rowHeight="350px">
+      <div
+        *ngFor="
+          let pokemon of pokemonDetails
+            | paginate
+              : {
+                  itemsPerPage: 20,
+                  currentPage: currentPage,
+                  totalItems: totalNumberOfPokemons
+                }
+        "
+      >
+        <mat-grid-tile>
+          <mat-card (click)="onSelect(pokemon)" class="pokemon-card">
+            <mat-card-header>
+              <mat-card-title>
+                <p class="name">{{ pokemon.name }}</p>
+              </mat-card-title>
+              <mat-card-subtitle>
+                <div class="types">
+                  <div *ngFor="let types of pokemon.types">
+                    <p [style.backgroundColor]="typeColor(types.type.name)" class="pokemon-type">{{ types.type.name }}</p>
+                  </div>
+                </div>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <a>
+              <div
+                *ngIf="
+                  pokemon.sprites.other['official-artwork'].front_default !==
+                    null;
+                  else nullImage
+                "
+              >
+                <img
+                  mat-card-image
+                  [src]="
+                    pokemon.sprites.other['official-artwork'].front_default
+                  "
+                />
+              </div>
+            </a>
+            <ng-template #nullImage>
+              <div class="noImage">
+                <img mat-card-image src="../../assets/PokedexLogo.png" />
+              </div>
+            </ng-template>
+          </mat-card>
+        </mat-grid-tile>
+      </div>
+    </mat-grid-list>
+  </div>
+</div>
