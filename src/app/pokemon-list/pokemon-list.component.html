@@ -7,15 +7,22 @@
         [responsive]="true"
         (pageChange)="
           currentPage = $event;
-          currentOffset = 20;
+          currentOffset = limit;
           pokemonDetails = [];
           getListOfPokemons()
         "
       ></pagination-controls>
     </div>
 
-    <div class="search-bar">
-      <input type="text" />
+    <div class="limiter">
+      <mat-form-field appearance="fill">
+        <mat-label>Pokemon limit</mat-label>
+        <mat-select (value)="limit" (selectionChange)="limiter($event.value)">
+          <mat-option *ngFor="let limit of pageLimit" [value]="limit.limit" >
+            {{limit.limit}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 </mat-card>
@@ -30,7 +37,7 @@
           let pokemon of pokemonDetails
             | paginate
               : {
-                  itemsPerPage: 20,
+                  itemsPerPage: limit,
                   currentPage: currentPage,
                   totalItems: totalNumberOfPokemons
                 }
@@ -54,7 +61,7 @@
               <div
                 *ngIf="
                   pokemon.sprites.other['official-artwork'].front_default !==
-                    null;
+                    '';
                   else nullImage
                 "
               >
@@ -68,7 +75,7 @@
             </a>
             <ng-template #nullImage>
               <div class="noImage">
-                <img mat-card-image src="../../assets/PokedexLogo.png" />
+                <img mat-card-image src="../../assets/no-image-found.png" />
               </div>
             </ng-template>
           </mat-card>

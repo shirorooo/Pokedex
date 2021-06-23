@@ -2,7 +2,7 @@
   <mat-card>
     <div class="pokemon-data">
       <div class="primary-details">
-        <div *ngIf="pokemon.sprites.other['official-artwork'].front_default !== null; else nullImage">
+        <div *ngIf="pokemon.sprites.other['official-artwork'].front_default != null; else nullImage">
           <img
           src="{{ pokemon.sprites.other['official-artwork'].front_default }}"
           alt=""
@@ -10,7 +10,7 @@
         </div>
         <ng-template #nullImage>
           <div class="noImage">
-            <img mat-card-image src="../../assets/PokedexLogo.png" />
+            <img mat-card-image src="../../assets/no-image-found.png" />
           </div>
         </ng-template>
         <p class="pokemon-name">{{ pokemon.name }}</p>

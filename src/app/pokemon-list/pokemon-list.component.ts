@@ -2,7 +2,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, from, Observable } from 'rxjs';
 import { PokedexService } from '../pokedex.service';
-import { Pokemon, PokemonDetails, } from '../pokemon';
+import { Pokemon, PokemonDetails, PokemonLimit, } from '../pokemon';
 
 
 @Component({
@@ -12,8 +12,14 @@ import { Pokemon, PokemonDetails, } from '../pokemon';
 })
 
 export class PokemonListComponent implements OnInit {
-  @Input() paginationPage!: number;
-  @Input() paginationOffset!: number;
+
+  public pageLimit: PokemonLimit[] = [
+    { limit: 10 },
+    { limit: 20 },
+    { limit: 30 },
+    { limit: 40 },
+    { limit: 50 },
+  ]
 
   public screenWidth = 0;
   public column = 0;
@@ -21,6 +27,7 @@ export class PokemonListComponent implements OnInit {
   public totalNumberOfPokemons = 0;
   public currentPage = 1;
   public currentOffset = 0;
+  public limit = 20;
 
 
   constructor(
@@ -31,14 +38,14 @@ export class PokemonListComponent implements OnInit {
   ngOnInit(): void {
     this.setColumn();
     this.getListOfPokemons();
-    console.log(this.pokemonDetails)
+    console.log(this.limit)
   }
 
 
   getListOfPokemons() {
     const pokemonObservable: Observable<PokemonDetails>[] = [];
 
-    this.pokemonService.getPokemons(20, (this.currentOffset) * (this.currentPage - 1))
+    this.pokemonService.getPokemons(this.limit, (this.currentOffset) * (this.currentPage - 1))
       .subscribe((response) => {
         this.totalNumberOfPokemons = response.count;
 
@@ -51,20 +58,24 @@ export class PokemonListComponent implements OnInit {
         forkJoin([...pokemonObservable]).subscribe((pokemon) => {
           this.pokemonDetails = [...pokemon]
         })
-
-        console.log(this.pokemonDetails)
       });
   }
 
   setColumn() {
     this.screenWidth = window.innerWidth;
-    if (this.screenWidth > 1144) {
+    if (this.screenWidth > 1324) {
       this.column = 5;
     }
-    else if (this.screenWidth <= 990 && this.screenWidth >= 580) {
+    else if (this.screenWidth <= 1324 && this.screenWidth >= 1222) {
+      this.column = 4;
+    }
+    else if (this.screenWidth <= 1221 && this.screenWidth >= 802) {
       this.column = 3;
     }
-    else if (this.screenWidth <= 581 && this.screenWidth >= 390) {
+    else if (this.screenWidth <= 803 && this.screenWidth >= 640) {
+      this.column = 2;
+    }
+    else if (this.screenWidth <= 641 && this.screenWidth >= 390) {
       this.column = 1;
     }
   }
@@ -118,16 +129,53 @@ export class PokemonListComponent implements OnInit {
     }
   }
 
+  limiter(limit: number) {
+    console.log(limit);
+    switch (limit) {
+      case 10:
+        this.limit = 10;
+        this.pokemonDetails = [];
+        this.getListOfPokemons()
+        break;
+      case 20:
+        this.limit = 20;
+        this.pokemonDetails = [];
+        this.getListOfPokemons()
+        break;
+      case 30:
+        this.limit = 30;
+        this.pokemonDetails = [];
+        this.getListOfPokemons()
+        break;
+      case 40:
+        this.limit = 40;
+        this.pokemonDetails = [];
+        this.getListOfPokemons()
+        break;
+      default:
+        this.limit = 50;
+        this.pokemonDetails = [];
+        this.getListOfPokemons()
+        break;
+    }
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.screenWidth = window.innerWidth;
-    if (this.screenWidth > 1144) {
+    if (this.screenWidth > 1324) {
       this.column = 5;
     }
-    else if (this.screenWidth <= 990 && this.screenWidth >= 580) {
+    else if (this.screenWidth <= 1324 && this.screenWidth >= 1222) {
+      this.column = 4;
+    }
+    else if (this.screenWidth <= 1221 && this.screenWidth >= 802) {
       this.column = 3;
     }
-    else if (this.screenWidth <= 581 && this.screenWidth >= 390) {
+    else if (this.screenWidth <= 801 && this.screenWidth >= 640) {
+      this.column = 2;
+    }
+    else if (this.screenWidth <= 641 && this.screenWidth >= 390) {
       this.column = 1;
     }
   }

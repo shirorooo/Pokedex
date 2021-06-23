@@ -4,24 +4,23 @@
   width: 100%;
   background-color: rgb(33, 30, 44);
   color: white;
-  margin-top: 0;
+  margin: 0;
+  height: 40px;
 }
 
 .top-menu {
-  display: grid;
-  grid-template-columns: auto 20%;
+  display: flex;
 }
 
+
 .paginator /deep/ .ngx-pagination .ng-star-inserted {
+  margin: 0;
   color: white;
+  font-size: 12px;
 }
 
 .paginator /deep/ .ngx-pagination .ng-star-inserted:hover {
   color: black;
-}
-
-.search-bar input {
-  border-radius: 20px;
 }
 
 .pokemon-list {
@@ -99,5 +98,19 @@ a img:hover {
 p {
   margin-right: 10px;
   text-transform: capitalize;
+  color: white;
+}
+
+.limiter mat-label{
+  color: white;
+  font-size: 12px;
+}
+
+mat-form-field{
+  width: 120px;
+  margin-left: 20px;
+}
+
+mat-form-field /deep/ .mat-select-value-text{
   color: white;
 }

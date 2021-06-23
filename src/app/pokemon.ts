@@ -37,6 +37,9 @@ interface Species {
     name: string,
     url: string
 }
+export interface PokemonLimit {
+    limit: number
+}
 
 export interface Moves {
     move: {
