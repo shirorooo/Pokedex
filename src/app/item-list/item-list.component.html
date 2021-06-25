@@ -1,1 +1,107 @@
-<p>item-list works!</p>
+<!-- TOOLBAR -->
+<mat-card class="top-bar-menu">
+  <div class="top-menu">
+    <div class="pagination">
+      <pagination-controls
+        class="paginator"
+        [responsive]="true"
+        (pageChange)="
+          currentPage = $event;
+          currentOffset = limit;
+          itemDetails = [];
+          pageChange()
+        "
+      ></pagination-controls>
+    </div>
+
+    <!-- LIMITER -->
+    <div class="limiter">
+      <mat-form-field appearance="fill">
+        <mat-label>Item limit</mat-label>
+        <mat-select (value)="(limit)" (selectionChange)="limiter($event.value)">
+          <mat-option *ngFor="let limit of pageLimit" [value]="limit">
+            {{ limit }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- FORM -->
+    <div class="search-bar">
+      <form class="example-form">
+        <input
+          type="text"
+          placeholder="Search PokeItem"
+          [formControl]="control"
+          [matAutocomplete]="auto"
+          (input)="itemSearch()"
+          [(ngModel)]="search"
+        />
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let item of filteredItems | async" [value]="item">
+            {{ item | titlecase }}
+          </mat-option>
+        </mat-autocomplete>
+      </form>
+    </div>
+  </div>
+</mat-card>
+
+<div class="item-card-holder">
+  <div class="item-header">
+    <!-- LOGO -->
+    <img
+      class="item-title"
+      src="../../assets/item-list.png"
+      (click)="filterCategory('clear')"
+    />
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter">
+    <mat-form-field appearance="fill">
+      <mat-label>Filter by type</mat-label>
+      <mat-select
+        (value)="(itemCategories)"
+        (selectionChange)="filterCategory($event.value)"
+      >
+        <mat-option *ngFor="let filter of itemCategories" [value]="filter.name"
+          >{{ filter.name | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- CARD -->
+  <mat-grid-list [cols]="column" rowHeight="300px">
+    <div
+      *ngFor="
+        let item of itemDetails
+          | paginate
+            : {
+                itemsPerPage: limit,
+                currentPage: currentPage,
+                totalItems: totalNumberOfItems
+              }
+      "
+    >
+      <mat-grid-tile>
+        <mat-card class="item-card">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title
+              ><p>{{ item.name }}</p></mat-card-title
+            >
+            <mat-card-subtitle>
+              <p>Category: {{ item.category.name }}</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <img mat-card-image [src]="item.sprites.default" />
+          <div id="effect">
+            <p>{{ item.effect_entries[0].short_effect }}</p>
+          </div>
+        </mat-card>
+      </mat-grid-tile>
+    </div>
+  </mat-grid-list>
+</div>

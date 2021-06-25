@@ -1,9 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { PokedexService } from '../pokedex.service';
-import { Moves, PokemonDetails, PokemonMoves, PokemonSpecies } from '../pokemon';
-import { pokemonsURL } from '../urls';
+import { PokemonDetails, PokemonMoves, PokemonSpecies } from '../pokemon';
+import { environment } from 'src/environments/environment';
+// import { pokemonsURL } from '../urls';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -12,28 +13,47 @@ import { pokemonsURL } from '../urls';
 })
 export class PokemonDetailsComponent implements OnInit {
 
-  public pokemonID: any;
+  public pokemonURL: any;
   public pokemon!: PokemonDetails;
   public statColor!: string;
   public pokemonSpecies!: PokemonSpecies;
   public pokemonMoves: PokemonMoves[] = [];
   public screenWidth = 0;
   public column = 0;
+  public previousPokemon = 0;
+  public nextPokemon = 0;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private pokemonService: PokedexService
   ) { }
 
   ngOnInit(): void {
     this.setColumn();
-    this.pokemonID = this.route.snapshot.paramMap.get('id');
+    this.getParamID();
     this.getPokemonDetails();
+  }
+
+  getParamID(){
+    this.route.paramMap
+    .subscribe((params: ParamMap) => {
+      this.pokemonURL = params.get('id')
+    });
+  }
+
+  getHeight(height: number){
+    return parseFloat((height * 3.0937).toFixed(1));
+  }
+
+  getWeight(weight: number){
+    return parseFloat((weight / 4.536
+      ).toFixed(1));
   }
 
   getPokemonDetails() {
     const pokemonObservable: Observable<PokemonMoves>[] = [];
-    this.pokemonService.getPokemonDetails(pokemonsURL + `/${this.pokemonID}`)
+    this.pokemonService.getPokemonDetails(environment.pokemonsURL + `/${this.pokemonURL}`)
       .subscribe((response) => {
         this.pokemon = response;
 
@@ -49,9 +69,12 @@ export class PokemonDetailsComponent implements OnInit {
         forkJoin([...pokemonObservable]).subscribe((move) => {
           this.pokemonMoves = [...move]
         })
-      });
+      },
+      (error) =>{
+        this.router.navigate(['**']);
+      }
+      );
   }
-
 
 
   typeColor(type: string) {

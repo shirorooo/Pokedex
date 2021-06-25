@@ -3,8 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  pokemonsURL: "https://pokeapi.co/api/v2/pokemon",
+  itemsURL: "https://pokeapi.co/api/v2/item",
+  itemCategoryURL: "https://pokeapi.co/api/v2/item-category",
+  typeURL: "https://pokeapi.co/api/v2/type/",
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file

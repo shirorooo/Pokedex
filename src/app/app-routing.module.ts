@@ -9,9 +9,9 @@ import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.compo
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
-  {path: 'pokemon-list', component: PokemonListComponent},
-  {path: 'pokemon-details/:id', component: PokemonDetailsComponent},
-  {path: 'item-list', component: ItemListComponent},
+  {path: 'pokemon', component: PokemonListComponent},
+  {path: 'pokemon/:id', component: PokemonDetailsComponent},
+  {path: 'item', component: ItemListComponent},
   {path: '**', component: PageNotFoundComponent,}
 ];
 

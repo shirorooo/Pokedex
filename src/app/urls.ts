@@ -1,1 +1,0 @@
-export const pokemonsURL = "https://pokeapi.co/api/v2/pokemon";

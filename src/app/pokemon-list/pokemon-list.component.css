@@ -1,6 +1,6 @@
 .top-bar-menu {
   position: fixed;
-  z-index: 3;
+  z-index: 1000;
   width: 100%;
   background-color: rgb(33, 30, 44);
   color: white;
@@ -12,6 +12,11 @@
   display: flex;
 }
 
+.search-bar {
+  display: block;
+  margin-left: auto;
+  margin-right: 5%;
+}
 
 .paginator /deep/ .ngx-pagination .ng-star-inserted {
   margin: 0;
@@ -29,10 +34,6 @@
   margin-left: auto;
   margin-right: auto;
   width: 90%;
-}
-
-.pokemon-title {
-  width: 300px;
 }
 
 .pokemon-card {
@@ -67,7 +68,7 @@ mat-card-header .mat-card-avatar {
   color: white;
 }
 
-a img {
+img {
   margin-top: 20px;
   display: block;
   margin-left: auto;
@@ -77,9 +78,24 @@ a img {
   transition: 0.6s ease-in-out;
 }
 
-a img:hover {
-  transform: translateY(-10%);
+img:hover {
+  transform: translateY(-15%);
   transition: 0.6s ease-in-out;
+}
+
+.pokemon-title {
+  margin-top: 0;
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+  width: 250px;
+  transform: translateY(0%);
+  transition: 0.6s ease-in-out;
+}
+
+.pokemon-title:hover {
+  width: 300px;
+  cursor: pointer;
 }
 
 .types {
@@ -89,7 +105,7 @@ a img:hover {
   padding-top: 10px;
 }
 
-.pokemon-type{
+.pokemon-type {
   width: 60px;
   text-align: center;
   border-radius: 20px;
@@ -101,16 +117,69 @@ p {
   color: white;
 }
 
-.limiter mat-label{
+.limiter mat-label {
   color: white;
   font-size: 12px;
 }
 
-mat-form-field{
+mat-form-field {
   width: 120px;
   margin-left: 20px;
+  background-color: none;
 }
 
-mat-form-field /deep/ .mat-select-value-text{
+mat-form-field /deep/ .mat-select-value-text {
   color: white;
+  text-transform: capitalize;
+}
+
+.pokemon-list-header {
+  display: flex;
+}
+
+form {
+  margin-left: auto;
+}
+
+form input {
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  height: 30px;
+  padding-left: 10px;
+}
+
+.filter {
+  margin-top: 40px;
+}
+
+.filter mat-label {
+  color: white;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.filter /deep/ .mat-form-field {
+  width: 200px;
+}
+
+@media screen and (max-width: 540px) {
+  .pokemon-list-header {
+    display: block;
+  }
+
+  form input {
+    margin-top: 50px;
+    width: 250px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .filter .mat-form-field {
+    width: 250px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

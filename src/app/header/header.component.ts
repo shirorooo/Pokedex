@@ -1,38 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  // ANIMATION FOR SUBHEADER. ILIPAT SA SEPARATE NA FILE FOR REUSABILITY
-  animations: [
-    trigger('popOverState', [
-      state('show', style({
-        opacity: 1
-      })),
-      state('hide', style({
-        opacity: 0
-      })),
-      transition('show => hide', animate('1000ms ease-out')),
-      transition('hide => show', animate('600ms ease-out')),
-    ])
-  ]
 })
 export class HeaderComponent implements OnInit {
   public subMenuClicked = false;
+  public search: string = '';
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
   }
 
-  public get stateName(){
-    return this.subMenuClicked ? 'show' : 'hide'
+  goToPokemonList(){
+    this.router.navigate(['pokemon'], {relativeTo: this.route});
   }
 
-  subMenuToggle(){
-    this.subMenuClicked = !this.subMenuClicked;
+  goToItemList(){
+    this.router.navigate(['item'], {relativeTo: this.route});
   }
 
  

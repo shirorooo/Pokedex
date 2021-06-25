@@ -27,17 +27,18 @@ mat-card {
   width: 50%;
 }
 
-.secondary-details .pokemon-info{
+.secondary-details .pokemon-info {
   text-align: left;
   font-size: 14px;
+  text-transform: none;
 }
 
-.secondary-details .flavor{
+.secondary-details .flavor {
   margin-bottom: 30px;
   color: white;
 }
 
-.secondary-details .flavor-description{
+.secondary-details .flavor-description {
   font-size: large;
   font-weight: 500;
   color: rgb(236, 238, 95);
@@ -76,26 +77,25 @@ p {
   font-size: small;
 }
 
-.poke-stat{
+.poke-stat {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 80%;
 }
 
-.stats{
+.stats {
   display: grid;
   grid-template-columns: 45% 55%;
 }
 
-label{
+label {
   color: white;
   text-transform: capitalize;
   letter-spacing: 2px;
 }
 
-
-mat-progress-bar{
+mat-progress-bar {
   border: 1px solid rgba(0, 0, 0, 0.217);
   display: block;
   margin-left: auto;
@@ -106,31 +106,31 @@ mat-progress-bar{
   margin: 10px;
 }
 
-.sub-info{
+.sub-info {
   margin-top: 10px;
 }
 
-.pokemon-moves-card{
+.pokemon-moves-card {
   width: 100px;
   transform: translateY(0%);
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
-.pokemon-moves-card:hover{
+.pokemon-moves-card:hover {
   cursor: pointer;
   background-color: rgba(186, 186, 186, 0.258);
   transform: translateY(-10%);
   z-index: 3;
   width: 500px;
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
-.pokemon-move{
+.pokemon-move {
   font-size: 12px;
   margin: 0;
 }
 
-.move-type{
+.move-type {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -139,22 +139,19 @@ mat-progress-bar{
   border-radius: 20px;
 }
 
-.move-type p{
+.move-type p {
   text-align: center;
 }
 
-.pokemon-stats{
+.pokemon-stats {
   margin-bottom: 20px;
 }
 
-.pokemon-moves{
+.pokemon-moves {
   margin-top: 30px;
 }
 
-
-
 @media screen and (max-width: 990px) {
-
   .pokemon-data {
     display: block;
     margin-left: auto;
@@ -176,9 +173,8 @@ mat-progress-bar{
   }
 }
 
-
 @media screen and (max-width: 600px) {
-  .poke-stat-label{
+  .poke-stat-label {
     font-size: 10px;
   }
 }

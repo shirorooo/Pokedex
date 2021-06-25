@@ -58,7 +58,7 @@ interface Stats {
     }
 }
 
-interface Types {
+export interface Types {
     slot: number,
     type: {
         name: string,
@@ -149,4 +149,14 @@ interface PokemonSpeciesFlavorText {
     flavor_text: string,
     language: {},
     version: {}
+}
+
+export interface PokemonFilterByType{
+    pokemon: [{
+        pokemon: {
+            name: string,
+            url: string
+        },
+        slot: number
+    }]
 }

@@ -1,8 +1,10 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { forkJoin, from, Observable } from 'rxjs';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, Observable } from 'rxjs';
 import { PokedexService } from '../pokedex.service';
-import { Pokemon, PokemonDetails, PokemonLimit, } from '../pokemon';
+import { Pokemon, PokemonDetails, PokemonLimit, Types, } from '../pokemon';
+import {map, startWith} from 'rxjs/operators';
 
 
 @Component({
@@ -13,43 +15,121 @@ import { Pokemon, PokemonDetails, PokemonLimit, } from '../pokemon';
 
 export class PokemonListComponent implements OnInit {
 
-  public pageLimit: PokemonLimit[] = [
-    { limit: 10 },
-    { limit: 20 },
-    { limit: 30 },
-    { limit: 40 },
-    { limit: 50 },
-  ]
+  public pageLimit: number[] = [10, 20, 30, 40, 50];
+  public type = [
+    {name: 'normal', color: '#a8a878'},
+    {name: 'fighting', color: '#c03028'},
+    {name: 'flying', color: '#a890f0'},
+    {name: 'poison', color: '#a040a0'},
+    {name: 'ground', color: '#e0c068'},
+    {name: 'rock', color: '#b8a038'},
+    {name: 'bug', color: '#a8b820'},
+    {name: 'ghost', color: '#705898'},
+    {name: 'steel', color: '#b8b8d0'},
+    {name: 'fire', color: '#f08030'},
+    {name: 'water', color: '#6890f0'},
+    {name: 'grass', color: '#78c850'},
+    {name: 'electric', color: '#f8d030'},
+    {name: 'psychic', color: '#f85888'},
+    {name: 'ice', color: '#98d8d8'},
+    {name: 'dragon', color: '#7038f8'},
+    {name: 'fairy', color: '#fc68d0'}
+
+  ];
 
   public screenWidth = 0;
   public column = 0;
   public pokemonDetails: PokemonDetails[] = [];
+  public searchAll: Pokemon[] = [];
+  public searchedPokemonDetails: PokemonDetails[] = [];
   public totalNumberOfPokemons = 0;
   public currentPage = 1;
   public currentOffset = 0;
   public limit = 20;
+  public search = '';
+  public allPokemon = 1118;
+  public initialOffset = 0;
+  public filterByType = '';
+  public isSearch = false;
+
+  control = new FormControl();
+  pokemonNames: string[] = [];
+  filteredPokemons: Observable<string[]> | undefined;
 
 
   constructor(
     private pokemonService: PokedexService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.setColumn();
+    this.filter();
     this.getListOfPokemons();
-    console.log(this.limit)
+    this.getListOfAllPokemons();
   }
 
+  pokemonSearch(){
+    this.pokemonDetails = [];
+    this.totalNumberOfPokemons = 0;
+    const pokemonObservable: Observable<PokemonDetails>[] = [];
+
+    if( this.search.length > 2){
+      const filteredPokemon = this.searchAll.filter((result) =>{
+        return result.name.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
+      });
+  
+      filteredPokemon.map((pokemon) =>{
+        this.totalNumberOfPokemons++;
+        pokemonObservable.push(this.pokemonService.getPokemonDetails(pokemon.url));
+      });
+  
+      forkJoin([...pokemonObservable]).subscribe((pokemon) =>{
+        this.pokemonDetails = [...pokemon];
+      });
+    } 
+    else {
+      this.totalNumberOfPokemons = this.allPokemon;
+      this.getListOfPokemons();
+    }
+  }
+
+  filter(){
+    this.filteredPokemons = this.control.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = this._normalizeValue(value);
+    return this.pokemonNames.filter(pokemonNames => this._normalizeValue(pokemonNames).includes(filterValue));
+  }
+
+  private _normalizeValue(value: string): string {
+    return value.toLowerCase().replace(/\s/g, '');
+  }
+
+  getListOfAllPokemons() {
+    const pokemonObservable: Observable<PokemonDetails>[] = [];
+
+    this.pokemonService.getPokemons(this.allPokemon, this.initialOffset)
+      .subscribe((response) => {
+
+        response.results.map((pokemon) => {
+            this.totalNumberOfPokemons++;
+            this.pokemonNames.push(pokemon.name);
+            this.searchAll.push(pokemon);
+        });
+      });
+  }
 
   getListOfPokemons() {
     const pokemonObservable: Observable<PokemonDetails>[] = [];
 
     this.pokemonService.getPokemons(this.limit, (this.currentOffset) * (this.currentPage - 1))
       .subscribe((response) => {
-        this.totalNumberOfPokemons = response.count;
-
-
         // I used fork join
         response.results.map((pokemon) => {
           pokemonObservable.push(this.pokemonService.getPokemonDetails(pokemon.url));
@@ -81,84 +161,72 @@ export class PokemonListComponent implements OnInit {
   }
 
   onSelect(pokemon: PokemonDetails) {
-    this.router.navigate(['/pokemon-details', pokemon.id]);
+    this.router.navigate([pokemon.id], {relativeTo: this.route});
   }
 
   typeColor(type: string) {
-    switch (type) {
-      case 'normal':
-        return '#a8a878';
-      case 'fighting':
-        return '#c03028';
-      case 'flying':
-        return '#a890f0';
-      case 'poison':
-        return '#a040a0';
-      case 'ground':
-        return '#e0c068';
-      case 'rock':
-        return '#b8a038';
-      case 'bug':
-        return '#a8b820';
-      case 'ghost':
-        return '#705898';
-      case 'steel':
-        return '#b8b8d0';
-      case 'fire':
-        return '#f08030';
-      case 'water':
-        return '#6890f0';
-      case 'grass':
-        return '#78c850';
-      case 'electric':
-        return '#f8d030';
-      case 'psychic':
-        return '#f85888';
-      case 'ice':
-        return '#98d8d8';
-      case 'dragon':
-        return '#7038f8';
-      case 'dark':
-        return '#705848';
-      case 'fairy':
-        return '#fc68d0';
-      case 'shadow':
-        return '#64515e';
-      default:
-        return 'black';
-    }
+    let color = '';
+    this.type.map((pokemonType) => {
+      if(type == pokemonType.name){
+        color = pokemonType.color;
+      }
+    });
+
+    return color;
   }
 
   limiter(limit: number) {
-    console.log(limit);
-    switch (limit) {
-      case 10:
-        this.limit = 10;
-        this.pokemonDetails = [];
-        this.getListOfPokemons()
-        break;
-      case 20:
-        this.limit = 20;
-        this.pokemonDetails = [];
-        this.getListOfPokemons()
-        break;
-      case 30:
-        this.limit = 30;
-        this.pokemonDetails = [];
-        this.getListOfPokemons()
-        break;
-      case 40:
-        this.limit = 40;
-        this.pokemonDetails = [];
-        this.getListOfPokemons()
-        break;
-      default:
-        this.limit = 50;
-        this.pokemonDetails = [];
-        this.getListOfPokemons()
-        break;
+    this.pageLimit.forEach((limiter) =>{
+      if(limit == limiter){
+        if(this.filterByType == ''){
+          this.limit = limit;
+          this.pokemonDetails = [];
+          this.pageChange();
+        }
+        else {
+          this.limit = limit;
+          this.currentPage = 1;
+          this.pageChange();
+        }
+      }
+    });
+  }
+
+  filterType(type: string){
+    this.pokemonDetails = [];
+    this.totalNumberOfPokemons = 0;
+
+    if(type == 'clear'){
+      this.totalNumberOfPokemons = 1118;
+      this.filterByType = '';
+      this.getListOfPokemons();
+    }
+    else{
+      this.filterByType = type;
+      const pokemonObservable: Observable<PokemonDetails>[] = [];
+
+      this.pokemonService.getPokemonByType(type).subscribe((pokemon) =>{
+        pokemon.pokemon.map((result) =>{
+          pokemonObservable.push(this.pokemonService.getPokemonDetails(result.pokemon.url));
+        });
+
+        forkJoin([...pokemonObservable]).subscribe((pokemon) =>{
+          this.pokemonDetails = [...pokemon];
+        });
+      });
     }
   }
+
+  pageChange(){
+    if(this.filterByType != ''){
+      this.pokemonDetails = this.pokemonDetails.slice(this.currentOffset, this.limit);
+      this.filterType(this.filterByType);
+    }
+    else{
+      this.getListOfPokemons();
+    }
+  }
+
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -180,8 +248,5 @@ export class PokemonListComponent implements OnInit {
     }
   }
 
-}
-function concatMap(arg0: (res: Pokemon) => void): import("rxjs").OperatorFunction<Pokemon, unknown> {
-  throw new Error('Function not implemented.');
 }
 
