@@ -33,12 +33,12 @@
         <label for=".flavor" class="flavor-description">Description:</label>
         <div
           *ngIf="
-            pokemonSpecies.flavor_text_entries[8].flavor_text != '';
+            pokemonSpecies.flavor_text_entries[3].flavor_text != '';
             else noText
           "
         >
           <p class="pokemon-info flavor">
-            {{ pokemonSpecies.flavor_text_entries[8].flavor_text }}
+            {{ pokemonSpecies.flavor_text_entries[3].flavor_text }}
           </p>
         </div>
         <ng-template #noText></ng-template>
