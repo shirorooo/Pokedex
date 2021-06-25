@@ -39,6 +39,9 @@ export class PokemonDetailsComponent implements OnInit {
     this.route.paramMap
     .subscribe((params: ParamMap) => {
       this.pokemonURL = params.get('id')
+    },
+    (error) =>{
+      this.router.navigate(['**']);
     });
   }
 
@@ -60,6 +63,9 @@ export class PokemonDetailsComponent implements OnInit {
         this.pokemonService.getPokemonSpeciesDetails(this.pokemon.species.url)
           .subscribe((response) => {
             this.pokemonSpecies = response;
+          },
+          (error) =>{
+            this.router.navigate(['**']);
           });
 
         response.moves.map((result) => {
@@ -68,7 +74,7 @@ export class PokemonDetailsComponent implements OnInit {
 
         forkJoin([...pokemonObservable]).subscribe((move) => {
           this.pokemonMoves = [...move]
-        })
+        });
       },
       (error) =>{
         this.router.navigate(['**']);
