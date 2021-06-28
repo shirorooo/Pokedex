@@ -52,7 +52,6 @@ export class PokemonDetailsComponent implements OnInit {
 
   // NAVIGATE TO POKEMON DETAILS
   showPokemonDetails(pokemonID: number){
-    let currentUrl = this.router.url;
     this.router.navigateByUrl('pokemon', {skipLocationChange: true}).then(() => {
       this.router.navigate(['pokemon', pokemonID]);
     });
@@ -115,9 +114,6 @@ export class PokemonDetailsComponent implements OnInit {
                 });
               }
             });
-          },
-          (error) =>{
-            this.router.navigate(['error-404']);
           });
 
         // WILL GET ALL THE DETAILS OF THE MOVE OF THE SPECIFIC POKEMON
@@ -130,7 +126,7 @@ export class PokemonDetailsComponent implements OnInit {
         });
       },
       (error) =>{
-        this.router.navigate(['**']);
+        this.router.navigate(['error-404']);
       }
       );
   }
