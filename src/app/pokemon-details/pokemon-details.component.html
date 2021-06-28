@@ -6,7 +6,7 @@
       <div class="primary-details">
         <div
           *ngIf="
-            pokemon.sprites.other['official-artwork'].front_default != null;
+            pokemon.sprites.other['official-artwork'].front_default != '';
             else nullImage
           "
         >
