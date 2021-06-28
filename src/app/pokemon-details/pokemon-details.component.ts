@@ -117,7 +117,7 @@ export class PokemonDetailsComponent implements OnInit {
             });
           },
           (error) =>{
-            this.router.navigate(['**']);
+            this.router.navigate(['error-404']);
           });
 
         // WILL GET ALL THE DETAILS OF THE MOVE OF THE SPECIFIC POKEMON
