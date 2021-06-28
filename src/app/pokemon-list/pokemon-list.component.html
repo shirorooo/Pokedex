@@ -1,31 +1,37 @@
 <!-- TOOLBAR -->
 <mat-card class="top-bar-menu">
   <div class="top-menu">
-    <div class="pagination">
-      <pagination-controls
-        class="paginator"
-        [responsive]="true"
-        (pageChange)="
-          currentPage = $event;
-          currentOffset = limit;
-          pokemonDetails = [];
-          pageChange()
-        "
-      ></pagination-controls>
+    <div class="paginate">
+      <div class="pagination">
+        <pagination-controls
+          class="paginator"
+          [responsive]="true"
+          (pageChange)="
+            currentPage = $event;
+            currentOffset = limit;
+            pokemonDetails = [];
+            pageChange()
+          "
+        ></pagination-controls>
+      </div>
+
+      <div class="limiter">
+        <!-- SELECTOR -->
+        <mat-form-field appearance="fill">
+          <mat-label>Pokemon limit</mat-label>
+          <mat-select
+            (value)="(limit)"
+            (selectionChange)="limiter($event.value)"
+          >
+            <mat-option *ngFor="let limit of pageLimit" [value]="limit">
+              {{ limit }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
-    <div class="limiter">
-      <!-- SELECTOR -->
-      <mat-form-field appearance="fill">
-        <mat-label>Pokemon limit</mat-label>
-        <mat-select (value)="(limit)" (selectionChange)="limiter($event.value)">
-          <mat-option *ngFor="let limit of pageLimit" [value]="limit">
-            {{ limit }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
+    <!-- SEARCH BAR -->
     <div class="search-bar">
       <form class="example-form">
         <input
@@ -67,8 +73,8 @@
         (value)="(filter)"
         (selectionChange)="filterType($event.value)"
       >
-        <mat-option *ngFor="let filter of type" [value]="filter.name"
-          >{{ filter.name | titlecase }}
+        <mat-option *ngFor="let filter of type" [value]="filter.name">
+          {{ filter.name | titlecase }}
         </mat-option>
       </mat-select>
     </mat-form-field>

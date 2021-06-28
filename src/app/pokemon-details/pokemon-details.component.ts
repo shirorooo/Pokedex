@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { PokedexService } from '../pokedex.service';
-import { PokemonDetails, PokemonMoves, PokemonSpecies } from '../pokemon';
+import { PokemonDetails, PokemonEvolution, PokemonMoves, PokemonSpecies, pokemonType } from '../pokemon';
 import { environment } from 'src/environments/environment';
 // import { pokemonsURL } from '../urls';
 
@@ -13,15 +13,19 @@ import { environment } from 'src/environments/environment';
 })
 export class PokemonDetailsComponent implements OnInit {
 
-  public pokemonURL: any;
-  public pokemon!: PokemonDetails;
-  public statColor!: string;
-  public pokemonSpecies!: PokemonSpecies;
-  public pokemonMoves: PokemonMoves[] = [];
-  public screenWidth = 0;
-  public column = 0;
-  public previousPokemon = 0;
-  public nextPokemon = 0;
+  type = pokemonType;
+  pokemonURL: any;
+  pokemon!: PokemonDetails;
+  statColor!: string;
+  pokemonSpecies!: PokemonSpecies;
+  pokemonMoves: PokemonMoves[] = [];
+  screenWidth = 0;
+  column = 0;
+  previousPokemon = 0;
+  nextPokemon = 0;
+  primaryForm!: PokemonDetails;
+  tierTwoEvolution: PokemonDetails[] = [];
+  tierThreeEvolution: PokemonDetails[] = [];
 
   constructor(
     private router: Router,
@@ -30,44 +34,93 @@ export class PokemonDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.setColumn();
     this.getParamID();
     this.getPokemonDetails();
+    this.setColumn();
   }
 
+  // WILL CHECK IF THE ID IS VALID
   getParamID(){
     this.route.paramMap
     .subscribe((params: ParamMap) => {
-      this.pokemonURL = params.get('id')
+      this.pokemonURL = params.get('id');
     },
     (error) =>{
-      this.router.navigate(['**']);
+      this.router.navigate(['error-404']);
     });
   }
 
+  // NAVIGATE TO POKEMON DETAILS
+  showPokemonDetails(pokemonID: number){
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('pokemon', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['pokemon', pokemonID]);
+    });
+  }
+
+  // WILL CONVERT THE HEIGHT FROM API
   getHeight(height: number){
     return parseFloat((height * 3.0937).toFixed(1));
   }
 
+  // WILL CONVERT THE WEIGHT FROM API
   getWeight(weight: number){
     return parseFloat((weight / 4.536
       ).toFixed(1));
   }
 
+  // WILL GET THE DETAIL OF THE POKEMON
   getPokemonDetails() {
+
     const pokemonObservable: Observable<PokemonMoves>[] = [];
     this.pokemonService.getPokemonDetails(environment.pokemonsURL + `/${this.pokemonURL}`)
       .subscribe((response) => {
         this.pokemon = response;
 
+        // WILL GET ALL THE DETAILS OF THE SPECIES
         this.pokemonService.getPokemonSpeciesDetails(this.pokemon.species.url)
           .subscribe((response) => {
             this.pokemonSpecies = response;
+
+            // WILL GET THE EVOLUTION CHAIN OF THIS POKEMON
+            this.pokemonService.getEvolutionChain(response.evolution_chain.url).subscribe((evolution) =>{
+              const secondaryEvolution = evolution.chain.evolves_to;
+
+              //WILL GET THE PRIMARY EVOLUTION
+              this.pokemonService.getPokemonEvolutionDetail(evolution.chain.species.name).subscribe((pokemon) =>{
+                this.primaryForm = pokemon;
+              });
+
+              // WILL GET THE SECONDARY EVOLUTION
+              if(secondaryEvolution != null){
+                const secondaryObservable: Observable<PokemonDetails>[] = [];
+                secondaryEvolution.map((pokemon) =>{
+                  secondaryObservable.push(this.pokemonService.getPokemonEvolutionDetail(pokemon.species.name));
+
+                  // WILL GET THE TERTIARY EVOLUTION
+                  if(pokemon.evolves_to != null){
+                    const tertiaryEvolution: Observable<PokemonDetails>[] = [];
+                    pokemon.evolves_to.map((pokemon) =>{
+                      tertiaryEvolution.push(this.pokemonService.getPokemonEvolutionDetail(pokemon.species.name));
+                    });
+
+                    forkJoin([...tertiaryEvolution]).subscribe((pokemon) =>{
+                      this.tierThreeEvolution = [...pokemon];
+                    });
+                  }
+                }
+                );
+                forkJoin([...secondaryObservable]).subscribe((pokemon) =>{
+                  this.tierTwoEvolution = [...pokemon];
+                });
+              }
+            });
           },
           (error) =>{
             this.router.navigate(['**']);
           });
 
+        // WILL GET ALL THE DETAILS OF THE MOVE OF THE SPECIFIC POKEMON
         response.moves.map((result) => {
           pokemonObservable.push(this.pokemonService.getPokemonMovesDetails(result.move.url));
         });
@@ -82,72 +135,19 @@ export class PokemonDetailsComponent implements OnInit {
       );
   }
 
-
+  // WILL SET THE BACKGROUND COLOR OF TYPE
   typeColor(type: string) {
-    switch (type) {
-      case 'normal':
-        this.statColor = '#a8a878';
-        return '#a8a878';
-      case 'fighting':
-        this.statColor = '#c03028';
-        return '#c03028';
-      case 'flying':
-        this.statColor = '#a890f0';
-        return '#a890f0';
-      case 'poison':
-        this.statColor = '#a040a0';
-        return '#a040a0';
-      case 'ground':
-        this.statColor = '#e0c068';
-        return '#e0c068';
-      case 'rock':
-        this.statColor = '#b8a038';
-        return '#b8a038';
-      case 'bug':
-        this.statColor = '#a8b820';
-        return '#a8b820';
-      case 'ghost':
-        this.statColor = '#705898';
-        return '#705898';
-      case 'steel':
-        this.statColor = '#b8b8d0';
-        return '#b8b8d0';
-      case 'fire':
-        this.statColor = '#f08030';
-        return '#f08030';
-      case 'water':
-        this.statColor = '#6890f0';
-        return '#6890f0';
-      case 'grass':
-        this.statColor = '#78c850';
-        return '#78c850';
-      case 'electric':
-        this.statColor = '#f8d030';
-        return '#f8d030';
-      case 'psychic':
-        this.statColor = '#f85888';
-        return '#f85888';
-      case 'ice':
-        this.statColor = '#98d8d8';
-        return '#98d8d8';
-      case 'dragon':
-        this.statColor = '#7038f8';
-        return '#7038f8';
-      case 'dark':
-        this.statColor = '#705848';
-        return '#705848';
-      case 'fairy':
-        this.statColor = '#fc68d0';
-        return '#fc68d0';
-      case 'shadow':
-        this.statColor = '#64515e';
-        return '#64515e';
-      default:
-        this.statColor = 'black';
-        return 'black';
-    }
+    let color = '';
+    this.type.map((pokemonType) => {
+      if(type == pokemonType.name){
+        color = pokemonType.color;
+      }
+    });
+
+    return color;
   }
 
+  // WILL CHECK IF THE WINDOW IS RESIZED
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.screenWidth = window.innerWidth;

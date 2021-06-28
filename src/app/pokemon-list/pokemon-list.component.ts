@@ -3,7 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { PokedexService } from '../pokedex.service';
-import { Pokemon, PokemonDetails, PokemonLimit, Types, } from '../pokemon';
+import { pageLimit, Pokemon, PokemonDetails, pokemonType } from '../pokemon';
 import {map, startWith} from 'rxjs/operators';
 
 
@@ -15,42 +15,22 @@ import {map, startWith} from 'rxjs/operators';
 
 export class PokemonListComponent implements OnInit {
 
-  public pageLimit: number[] = [10, 20, 30, 40, 50];
-  public type = [
-    {name: 'normal', color: '#a8a878'},
-    {name: 'fighting', color: '#c03028'},
-    {name: 'flying', color: '#a890f0'},
-    {name: 'poison', color: '#a040a0'},
-    {name: 'ground', color: '#e0c068'},
-    {name: 'rock', color: '#b8a038'},
-    {name: 'bug', color: '#a8b820'},
-    {name: 'ghost', color: '#705898'},
-    {name: 'steel', color: '#b8b8d0'},
-    {name: 'fire', color: '#f08030'},
-    {name: 'water', color: '#6890f0'},
-    {name: 'grass', color: '#78c850'},
-    {name: 'electric', color: '#f8d030'},
-    {name: 'psychic', color: '#f85888'},
-    {name: 'ice', color: '#98d8d8'},
-    {name: 'dragon', color: '#7038f8'},
-    {name: 'fairy', color: '#fc68d0'}
-
-  ];
-
-  public screenWidth = 0;
-  public column = 0;
-  public pokemonDetails: PokemonDetails[] = [];
-  public searchAll: Pokemon[] = [];
-  public searchedPokemonDetails: PokemonDetails[] = [];
-  public totalNumberOfPokemons = 0;
-  public currentPage = 1;
-  public currentOffset = 0;
-  public limit = 20;
-  public search = '';
-  public allPokemon = 1118;
-  public initialOffset = 0;
-  public filterByType = '';
-  public isSearch = false;
+  pageLimit = pageLimit;
+  type = pokemonType;
+  screenWidth = 0;
+  column = 0;
+  pokemonDetails: PokemonDetails[] = [];
+  searchAll: Pokemon[] = [];
+  searchedPokemonDetails: PokemonDetails[] = [];
+  totalNumberOfPokemons = 0;
+  currentPage = 1;
+  currentOffset = 0;
+  limit = 10;
+  search = '';
+  allPokemon = 1118;
+  initialOffset = 0;
+  filterByType = '';
+  isSearch = false;
 
   control = new FormControl();
   pokemonNames: string[] = [];
@@ -70,12 +50,17 @@ export class PokemonListComponent implements OnInit {
     this.getListOfAllPokemons();
   }
 
+  // WILL SEARCH THE POKEMON THAT MATCHES THE DATA IN SEARCH BAR
   pokemonSearch(){
     this.pokemonDetails = [];
     this.totalNumberOfPokemons = 0;
     const pokemonObservable: Observable<PokemonDetails>[] = [];
 
+    // WILL PERFORM THE FILTERING AND SEARCH ONCE THE INPUT TEXT REACHES THE LENGTH OF 3
     if( this.search.length > 2){
+      this.isSearch = true;
+
+      // WILL GET ALL THE POKEMON THAT MATCHES THE TEXTS INPUT IN FORM
       const filteredPokemon = this.searchAll.filter((result) =>{
         return result.name.toLocaleLowerCase().match(this.search.toLocaleLowerCase());
       });
@@ -90,11 +75,13 @@ export class PokemonListComponent implements OnInit {
       });
     } 
     else {
+      this.isSearch = false;
       this.totalNumberOfPokemons = this.allPokemon;
       this.getListOfPokemons();
     }
   }
 
+  // WILL PERFORM AUTOCOMPLETE
   filter(){
     this.filteredPokemons = this.control.valueChanges.pipe(
       startWith(''),
@@ -103,14 +90,11 @@ export class PokemonListComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = this._normalizeValue(value);
-    return this.pokemonNames.filter(pokemonNames => this._normalizeValue(pokemonNames).includes(filterValue));
+    const filterValue = value.toLocaleLowerCase();
+    return this.pokemonNames.filter(pokemonNames => pokemonNames.toLocaleLowerCase().includes(filterValue));
   }
 
-  private _normalizeValue(value: string): string {
-    return value.toLowerCase().replace(/\s/g, '');
-  }
-
+  // WILL GET ALL THE LIST OF POKEMON 
   getListOfAllPokemons() {
     const pokemonObservable: Observable<PokemonDetails>[] = [];
 
@@ -125,6 +109,7 @@ export class PokemonListComponent implements OnInit {
       });
   }
 
+  // WILL GET THE DETAILS OF POKEMONS BASE ON THE LIMIT SET 
   getListOfPokemons() {
     const pokemonObservable: Observable<PokemonDetails>[] = [];
 
@@ -141,6 +126,7 @@ export class PokemonListComponent implements OnInit {
       });
   }
 
+  // SETS THE COLUMN OF THE CARDS
   setColumn() {
     this.screenWidth = window.innerWidth;
     if (this.screenWidth > 1324) {
@@ -160,13 +146,15 @@ export class PokemonListComponent implements OnInit {
     }
   }
 
+  // NAVIGATE TO POKEMON DETAILS
   onSelect(pokemon: PokemonDetails) {
     this.router.navigate([pokemon.id], {relativeTo: this.route});
   }
 
+  // WILL SET THE BACKGROUND COLOR OF EACH TYPE
   typeColor(type: string) {
     let color = '';
-    this.type.map((pokemonType) => {
+    pokemonType.map((pokemonType) => {
       if(type == pokemonType.name){
         color = pokemonType.color;
       }
@@ -175,7 +163,9 @@ export class PokemonListComponent implements OnInit {
     return color;
   }
 
+  // WILL SET THE LIMIT OF POKEMON THAT WILL BE DISPLAYED PER PAGE
   limiter(limit: number) {
+    this.currentPage = 1;
     this.pageLimit.forEach((limiter) =>{
       if(limit == limiter){
         if(this.filterByType == ''){
@@ -185,13 +175,13 @@ export class PokemonListComponent implements OnInit {
         }
         else {
           this.limit = limit;
-          this.currentPage = 1;
           this.pageChange();
         }
       }
     });
   }
 
+  // WILL DISPLAY THE POKEMON THAT IS FILTERED BY TYPE
   filterType(type: string){
     this.pokemonDetails = [];
     this.totalNumberOfPokemons = 0;
@@ -217,10 +207,15 @@ export class PokemonListComponent implements OnInit {
     }
   }
 
+  // WHEN PAGINATOR IS CLICKED WILL DISPLAY THE NEXT SET OF DATA
   pageChange(){
     if(this.filterByType != ''){
       this.pokemonDetails = this.pokemonDetails.slice(this.currentOffset, this.limit);
       this.filterType(this.filterByType);
+    }
+    else if(this.isSearch == true){
+      this.pokemonDetails = this.pokemonDetails.slice(this.currentOffset, this.currentOffset + this.limit);
+      this.pokemonSearch();
     }
     else{
       this.getListOfPokemons();
@@ -228,6 +223,7 @@ export class PokemonListComponent implements OnInit {
   }
 
 
+  // WILL CHECK IF THE WINDOW SIZE CHANGED
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.screenWidth = window.innerWidth;

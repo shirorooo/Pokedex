@@ -1,3 +1,10 @@
+<mat-progress-bar
+  *ngIf="loaderService.loading | async"
+  class="loader"
+  color="accent"
+  mode="indeterminate"
+></mat-progress-bar>
+
 <mat-toolbar color="primary">
   <a class="logo" routerLink="/">
     <img src="../../assets/pokemon logo.png" alt="" />

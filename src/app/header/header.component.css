@@ -28,3 +28,8 @@ a:hover {
   font-weight: 300;
   margin-left: 30px;
 }
+
+.loader {
+  position: fixed;
+  z-index: 5;
+}

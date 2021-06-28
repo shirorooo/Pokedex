@@ -5,7 +5,6 @@
   background-color: rgb(33, 30, 44);
   color: white;
   margin: 0;
-  height: 40px;
 }
 
 .top-menu {
@@ -16,6 +15,12 @@
   display: block;
   margin-left: auto;
   margin-right: 5%;
+  margin-top: 20px;
+}
+
+.paginate {
+  display: flex;
+  margin-top: 10px;
 }
 
 .paginator /deep/ .ngx-pagination .ng-star-inserted {
@@ -29,7 +34,7 @@
 }
 
 .pokemon-list {
-  margin-top: 120px;
+  margin-top: 150px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -181,5 +186,22 @@ form input {
     display: block;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 816px) {
+  .top-menu {
+    display: block;
+  }
+
+  .search-bar input {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+  }
+  .paginate {
+    margin-top: 0;
+    height: 40px;
   }
 }

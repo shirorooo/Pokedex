@@ -121,7 +121,9 @@ export interface PokemonSpecies {
     capture_rate: number,
     color: {},
     egg_group: [],
-    evolution_chain: {},
+    evolution_chain: {
+        url: string
+    },
     evolves_from_species: any,
     flavor_text_entries: PokemonSpeciesFlavorText[],
     form_descriptions: [],
@@ -160,3 +162,43 @@ export interface PokemonFilterByType{
         slot: number
     }]
 }
+
+export interface PokemonEvolution{
+    baby_trigger_item: any,
+    chain: PokemonChain,
+    id: number;
+}
+
+interface PokemonChain{
+    evolution_details: [],
+    evolves_to: PokemonChain[],
+    is_baby: boolean,
+    species: {
+        name: string,
+        url: string
+    }
+}
+
+export const pageLimit: number[] = [10, 20, 30, 40, 50];
+
+export const pokemonType = [
+    {name: 'normal', color: '#a8a878'},
+    {name: 'fighting', color: '#c03028'},
+    {name: 'flying', color: '#a890f0'},
+    {name: 'poison', color: '#a040a0'},
+    {name: 'ground', color: '#e0c068'},
+    {name: 'rock', color: '#b8a038'},
+    {name: 'bug', color: '#a8b820'},
+    {name: 'ghost', color: '#705898'},
+    {name: 'steel', color: '#b8b8d0'},
+    {name: 'fire', color: '#f08030'},
+    {name: 'water', color: '#6890f0'},
+    {name: 'grass', color: '#78c850'},
+    {name: 'electric', color: '#f8d030'},
+    {name: 'psychic', color: '#f85888'},
+    {name: 'ice', color: '#98d8d8'},
+    {name: 'dragon', color: '#7038f8'},
+    {name: 'fairy', color: '#fc68d0'},
+    {name: 'dark', color: 'rgba(0, 0, 0, 0.462)'}
+
+  ];

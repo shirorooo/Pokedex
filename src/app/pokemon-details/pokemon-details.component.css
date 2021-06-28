@@ -2,13 +2,22 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 75%;
   margin-top: 50px;
+}
+
+.pokedex-logo {
+  width: 50px;
 }
 
 mat-card {
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.231);
+}
+
+.pokedex-logo img {
+  position: fixed;
+  width: 80px;
 }
 
 .pokemon-data {
@@ -151,7 +160,62 @@ mat-progress-bar {
   margin-top: 30px;
 }
 
+.pokemon-evolution-label {
+  margin-top: 30px;
+  width: 200px;
+}
+
+.evolution-card {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 60px;
+  width: 90%;
+}
+
+.evolution-card p {
+  font-size: 15px;
+}
+
+.evolution-card .evolution-label {
+  font-size: 20px;
+  letter-spacing: 2px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-shadow: -1px 3px 9px #000000;
+}
+
+.evolution-card img {
+  width: 137px;
+  transition: 0.3s ease-in-out;
+}
+
+.evolution-card img:hover {
+  cursor: pointer;
+  width: 200px;
+  transform: translateY(-10%);
+  transition: 0.3s ease-in-out;
+}
+
+.evolution {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 1390px) {
+  .evolution {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+  }
+}
+
 @media screen and (max-width: 990px) {
+  .evolution {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  }
+
   .pokemon-data {
     display: block;
     margin-left: auto;
@@ -173,8 +237,18 @@ mat-progress-bar {
   }
 }
 
+@media screen and (max-width: 847px) {
+  .evolution {
+    grid-template-columns: auto auto auto;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .poke-stat-label {
     font-size: 10px;
+  }
+
+  .evolution {
+    display: block;
   }
 }

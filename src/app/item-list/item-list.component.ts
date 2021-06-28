@@ -4,6 +4,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ItemByCategory, ItemCategory, ItemCategoryList, ItemDetails, ItemResults } from '../item';
 import { PokedexService } from '../pokedex.service';
+import { pageLimit } from '../pokemon';
 
 @Component({
   selector: 'app-item-list',
@@ -20,10 +21,10 @@ export class ItemListComponent implements OnInit {
   public initialOffset = 0;
   public screenWidth = 0;
   public column = 0;
-  public pageLimit: number[] = [10, 20, 30, 40, 50];
+  public pageLimit = pageLimit;
   public currentPage = 1;
   public currentOffset = 0;
-  public limit = 20;
+  public limit = 10;
   public totalNumberOfItems = 0;
   public filterByCategory = '';
   public allItems = 954;
@@ -111,6 +112,7 @@ export class ItemListComponent implements OnInit {
 
   // WILL SET THE LIMIT TO BE DISPLAYED
   limiter(limit: number) {
+    this.currentPage = 1;
     this.pageLimit.forEach((limiter) =>{
       if(limit == limiter){
         if(this.filterByCategory == ''){
@@ -120,7 +122,6 @@ export class ItemListComponent implements OnInit {
         }
         else {
           this.limit = limit;
-          this.currentPage = 1;
           this.pageChange();
         }
       }
@@ -128,20 +129,20 @@ export class ItemListComponent implements OnInit {
   }
 
   // WILL FILTER ITEMS BY CATEGORY
-  filterCategory(type: string){
+  filterCategory(category: string){
     this.itemDetails = [];
     this.totalNumberOfItems = 0;
 
-    if(type == 'clear'){
+    if(category == 'clear'){
       this.totalNumberOfItems = this.allItems;
       this.filterByCategory = '';
       this.getItemList();
     }
     else{
-
+      this.filterByCategory = category;
       const itemObservable: Observable<ItemDetails>[] = [];
 
-      this.itemService.getItemByCategory(type).subscribe((item) =>{
+      this.itemService.getItemByCategory(category).subscribe((item) =>{
         item.items.map((result) =>{
           itemObservable.push(this.itemService.getItemDetails(result.url));
         });
@@ -177,12 +178,8 @@ export class ItemListComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = this._normalizeValue(value);
-    return this.itemNames.filter(itemNames => this._normalizeValue(itemNames).includes(filterValue));
-  }
-
-  private _normalizeValue(value: string): string {
-    return value.toLowerCase().replace(/\s/g, '');
+    const filterValue = value.toLocaleLowerCase();
+    return this.itemNames.filter(itemNames => itemNames.toLocaleLowerCase().includes(filterValue));
   }
 
 
@@ -207,6 +204,7 @@ export class ItemListComponent implements OnInit {
     }
   }
 
+  // WILL SET THE COLUMN BASE ON THE WINDOW SIZE ON LOAD
   setColumn() {
     this.screenWidth = window.innerWidth;
     if (this.screenWidth > 1324) {

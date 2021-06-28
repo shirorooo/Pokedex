@@ -1,6 +1,8 @@
 <div class="pokemon">
+  <!-- FIRST CARD -->
   <mat-card>
     <div class="pokemon-data">
+      <!-- IMAGE, NAME, AND TYPE -->
       <div class="primary-details">
         <div
           *ngIf="
@@ -29,19 +31,30 @@
 
       <div class="divider"></div>
 
+      <!-- DESCRIPTION AND OTHER SUPPORTING INFO -->
       <div class="secondary-details">
         <label for=".flavor" class="flavor-description">Description:</label>
         <div
           *ngIf="
-            pokemonSpecies.flavor_text_entries[3].flavor_text != '';
+            pokemonSpecies.is_mythical == true ||
+            pokemonSpecies.is_legendary == true
+          "
+        >
+          <p class="pokemon-info">A Legendary Pokemon</p>
+        </div>
+        <div
+          *ngIf="
+            pokemonSpecies.flavor_text_entries[8].flavor_text != '';
             else noText
           "
         >
           <p class="pokemon-info flavor">
-            {{ pokemonSpecies.flavor_text_entries[3].flavor_text }}
+            {{ pokemonSpecies.flavor_text_entries[8].flavor_text }}
           </p>
         </div>
-        <ng-template #noText></ng-template>
+        <ng-template #noText>
+          <p>Unknown description</p>
+        </ng-template>
         <p class="pokemon-info">Pokemon ID: #{{ pokemon.id }}</p>
         <p class="pokemon-info">Height: {{ getHeight(pokemon.height) }}''</p>
         <p class="pokemon-info">Weight: {{ getWeight(pokemon.weight) }} lbs</p>
@@ -52,8 +65,11 @@
     </div>
   </mat-card>
 
+  <!-- SECOND CARD -->
   <mat-card class="sub-info">
+    <!-- STAT LABEL -->
     <img class="pokemon-stats" src="../../assets/Stats.png" />
+    <!-- STATS INFO -->
     <div class="poke-stat">
       <div *ngFor="let stat of pokemon.stats">
         <div class="stats">
@@ -70,27 +86,94 @@
       </div>
     </div>
 
-    <img class="pokemon-moves" src="../../assets/Moves.png" />
-    <div class="poke-moves">
-      <mat-grid-list [cols]="column" rowHeight="120px">
-        <div *ngFor="let move of pokemonMoves">
-          <mat-grid-tile>
-            <mat-card class="pokemon-moves-card">
-              <mat-card-title>
-                <p class="pokemon-move">{{ move.name }}</p>
-              </mat-card-title>
-              <mat-card-subtitle
-                class="move-type"
-                [style.backgroundColor]="typeColor(move.type.name)"
-              >
-                <p class="pokemon-move">{{ move.type.name }}</p>
-              </mat-card-subtitle>
-              <mat-progress-bar mode="determinate" [value]="move.power">
-              </mat-progress-bar>
-            </mat-card>
-          </mat-grid-tile>
+    <!-- EVOLUTION LABEL -->
+    <img class="pokemon-evolution-label" src="../../assets/Evolution.png" />
+    <!-- EVOLUTION INFO -->
+    <div class="pokemon-evolution">
+      <!-- PRIMARY EVOLUTION -->
+      <div *ngIf="primaryForm != null">
+        <div class="evolution-card">
+          <p class="evolution-label">Base Evolution</p>
+          <a (click)="showPokemonDetails(primaryForm.id)">
+            <img
+              src="{{
+                primaryForm.sprites.other['official-artwork'].front_default
+              }}"
+              alt=""
+            />
+          </a>
+          <p>{{ primaryForm.name }}</p>
         </div>
-      </mat-grid-list>
+      </div>
+
+      <!-- SECONDARY EVOLUTION -->
+      <div *ngIf="tierTwoEvolution.length >= 1">
+        <div class="evolution-card">
+          <p class="evolution-label">Evolves To</p>
+          <div class="evolution">
+            <div *ngFor="let secondaryEvolution of tierTwoEvolution">
+              <a (click)="showPokemonDetails(secondaryEvolution.id)">
+                <img
+                  src="{{
+                    secondaryEvolution.sprites.other['official-artwork']
+                      .front_default
+                  }}"
+                  alt=""
+                />
+              </a>
+              <p>{{ secondaryEvolution.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TERTIARY EVOLUTION -->
+      <div *ngIf="tierThreeEvolution.length >= 1">
+        <div class="evolution-card">
+          <p class="evolution-label">Evolves To</p>
+          <div class="evolution">
+            <div *ngFor="let tertiaryEvolution of tierThreeEvolution">
+              <a (click)="showPokemonDetails(tertiaryEvolution.id)">
+                <img
+                  src="{{
+                    tertiaryEvolution.sprites.other['official-artwork']
+                      .front_default
+                  }}"
+                  alt=""
+                />
+              </a>
+              <p>{{ tertiaryEvolution.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="pokemonMoves.length >= 1">
+      <!-- MOVE LABEL -->
+      <img class="pokemon-moves" src="../../assets/Moves.png" />
+      <!-- MOVE INFO -->
+      <div class="poke-moves">
+        <mat-grid-list [cols]="column" rowHeight="120px">
+          <div *ngFor="let move of pokemonMoves">
+            <mat-grid-tile>
+              <mat-card class="pokemon-moves-card">
+                <mat-card-title>
+                  <p class="pokemon-move">{{ move.name }}</p>
+                </mat-card-title>
+                <mat-card-subtitle
+                  class="move-type"
+                  [style.backgroundColor]="typeColor(move.type.name)"
+                >
+                  <p class="pokemon-move">{{ move.type.name }}</p>
+                </mat-card-subtitle>
+                <mat-progress-bar mode="determinate" [value]="move.power">
+                </mat-progress-bar>
+              </mat-card>
+            </mat-grid-tile>
+          </div>
+        </mat-grid-list>
+      </div>
     </div>
   </mat-card>
 </div>

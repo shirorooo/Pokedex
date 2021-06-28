@@ -1,29 +1,34 @@
 <!-- TOOLBAR -->
 <mat-card class="top-bar-menu">
   <div class="top-menu">
-    <div class="pagination">
-      <pagination-controls
-        class="paginator"
-        [responsive]="true"
-        (pageChange)="
-          currentPage = $event;
-          currentOffset = limit;
-          itemDetails = [];
-          pageChange()
-        "
-      ></pagination-controls>
-    </div>
+    <div class="paginate">
+      <div class="pagination">
+        <pagination-controls
+          class="paginator"
+          [responsive]="true"
+          (pageChange)="
+            currentPage = $event;
+            currentOffset = limit;
+            itemDetails = [];
+            pageChange()
+          "
+        ></pagination-controls>
+      </div>
 
-    <!-- LIMITER -->
-    <div class="limiter">
-      <mat-form-field appearance="fill">
-        <mat-label>Item limit</mat-label>
-        <mat-select (value)="(limit)" (selectionChange)="limiter($event.value)">
-          <mat-option *ngFor="let limit of pageLimit" [value]="limit">
-            {{ limit }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <!-- LIMITER -->
+      <div class="limiter">
+        <mat-form-field appearance="fill">
+          <mat-label>Item limit</mat-label>
+          <mat-select
+            (value)="(limit)"
+            (selectionChange)="limiter($event.value)"
+          >
+            <mat-option *ngFor="let limit of pageLimit" [value]="limit">
+              {{ limit }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
     <!-- FORM -->

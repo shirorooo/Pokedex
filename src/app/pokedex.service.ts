@@ -1,17 +1,22 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ItemByCategory, ItemCategoryList, ItemDetails, Items } from './item';
-import { PokemonDetails, PokemonFilterByType, PokemonMoves, Pokemons, PokemonSpecies } from './pokemon';
+import { PokemonDetails, PokemonEvolution, PokemonFilterByType, PokemonMoves, Pokemons, PokemonSpecies } from './pokemon';
 import { environment } from 'src/environments/environment';
-// import { itemCategoryURL, itemsURL, pokemonsURL } from './urls';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PokedexService {
 
-  constructor(private http: HttpClient) { }
+export class PokedexService {
+  
+  constructor(private http: HttpClient) {
+  }
+
+  language = new HttpHeaders({
+    'Accept-Language': 'en'
+  });
 
   getPokemons(limit: number, offset: number): Observable<Pokemons> {
     return this.http.get<Pokemons>(environment.pokemonsURL + '?limit=' + limit + '&offset=' + offset);
@@ -22,7 +27,7 @@ export class PokedexService {
   }
 
   getPokemonSpeciesDetails(url: string): Observable<PokemonSpecies> {
-    return this.http.get<PokemonSpecies>(url);
+    return this.http.get<PokemonSpecies>(url, {headers: this.language});
   }
 
   getPokemonMovesDetails(url: string) {
@@ -47,5 +52,13 @@ export class PokedexService {
 
   getPokemonByType(type: string): Observable<PokemonFilterByType>{
     return this.http.get<PokemonFilterByType>(environment.typeURL + type);
+  }
+
+  getEvolutionChain(url: string){
+    return this.http.get<PokemonEvolution>(url);
+  }
+
+  getPokemonEvolutionDetail(name: string): Observable<PokemonDetails>{
+    return this.http.get<PokemonDetails>(`${environment.pokemonsURL}/${name}`)
   }
 }
