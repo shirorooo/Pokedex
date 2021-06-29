@@ -204,7 +204,7 @@ export class ItemListComponent implements OnInit {
     }
   }
 
-  // WILL SET THE COLUMN BASE ON THE WINDOW SIZE ON LOAD
+  // WILL SET THE COLUMN BASE ON THE WINDOW SIZE ON LOADHirap naman kasi non hahah kahaba ng code hahahah
   setColumn() {
     this.screenWidth = window.innerWidth;
     if (this.screenWidth > 1324) {

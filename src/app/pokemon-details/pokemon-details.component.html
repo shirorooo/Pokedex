@@ -55,12 +55,34 @@
         <ng-template #noText>
           <p>Unknown description</p>
         </ng-template>
-        <p class="pokemon-info">Pokemon ID: #{{ pokemon.id }}</p>
-        <p class="pokemon-info">Height: {{ getHeight(pokemon.height) }}''</p>
-        <p class="pokemon-info">Weight: {{ getWeight(pokemon.weight) }} lbs</p>
-        <p class="pokemon-info">
-          Capture Rate: {{ pokemonSpecies.capture_rate }}%
-        </p>
+
+        <!-- POKEMON SUB-INFO -->
+        <div class="pokemon-sub-info">
+          <div class="sub-info-left">
+            <label for="">Pokemon ID:</label>
+            <p class="pokemon-info">{{ getID(pokemon.id) }}</p>
+
+            <label for="">Height:</label>
+            <p class="pokemon-info">{{ getHeight(pokemon.height) }}''</p>
+
+            <label for="">Weight:</label>
+            <p class="pokemon-info">{{ getWeight(pokemon.weight) }} lbs</p>
+
+            <label for="">Capture Rate:</label>
+            <p class="pokemon-info">{{ pokemonSpecies.capture_rate }}%</p>
+          </div>
+
+          <div class="sub-info-right">
+            <div *ngIf="pokemon.abilities != null">
+              <label for="">Abilities:</label>
+              <div *ngFor="let ability of pokemon.abilities; let index = index">
+                <p class="pokemon-info ability">
+                  {{ index + 1 }}.) {{ ability.ability.name }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </mat-card>
@@ -71,8 +93,8 @@
     <img class="pokemon-stats" src="../../assets/Stats.png" />
     <!-- STATS INFO -->
     <div class="poke-stat">
-      <div *ngFor="let stat of pokemon.stats">
-        <div class="stats">
+      <div class="stats">
+        <div *ngFor="let stat of pokemon.stats">
           <label class="poke-stat-label" for="pokemon-stat"
             >{{ stat.stat.name }}: {{ stat.base_stat }}</label
           >

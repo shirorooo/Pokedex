@@ -5,6 +5,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: rgba(91, 91, 91, 0.768);
+  font-family: Varela Round;
+  font-variant: normal;
+  background-color: #636363;
 }

@@ -56,6 +56,23 @@ export class PokemonDetailsComponent implements OnInit {
       this.router.navigate(['pokemon', pokemonID]);
     });
   }
+  
+  // WILL GET THE ID 
+  getID(id: number){
+
+    let pokemonID: string = '';
+    if(id.toString().length == 1){
+      pokemonID = `#00${id}`;
+    }
+    else if(id.toString().length == 2){
+      pokemonID = `#0${id}`;
+    }
+    else{
+      pokemonID = `#${id}`;
+    }
+
+    return pokemonID;
+  }
 
   // WILL CONVERT THE HEIGHT FROM API
   getHeight(height: number){
@@ -139,7 +156,6 @@ export class PokemonDetailsComponent implements OnInit {
         color = pokemonType.color;
       }
     });
-
     return color;
   }
 

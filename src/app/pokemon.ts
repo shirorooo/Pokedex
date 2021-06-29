@@ -13,7 +13,11 @@ export interface Pokemons {
 
 
 export interface PokemonDetails {
-    abilities: [],
+    abilities: [{
+        ability: {
+            name: string
+        }
+    }],
     base_experience: number,
     forms: [],
     game_indices: [],

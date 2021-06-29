@@ -2,7 +2,7 @@
   position: fixed;
   z-index: 3;
   width: 100%;
-  background-color: rgb(33, 30, 44);
+  background-color: #00021f;
   color: white;
   margin: 0;
 }
@@ -131,7 +131,8 @@ mat-form-field /deep/ .mat-select-value-text {
 }
 
 .item-title:hover {
-  width: 300px;
+  transform: translateY(-40%);
+  transition: 0.6s ease-in-out;
   cursor: pointer;
 }
 
@@ -143,8 +144,9 @@ form input {
   border-radius: 20px;
   border: none;
   outline: none;
-  height: 30px;
+  height: 40px;
   padding-left: 10px;
+  width: 250px;
   margin-top: 20px;
 }
 

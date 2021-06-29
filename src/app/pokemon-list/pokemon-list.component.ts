@@ -187,6 +187,7 @@ export class PokemonListComponent implements OnInit {
     this.totalNumberOfPokemons = 0;
 
     if(type == 'clear'){
+      // change to dynamic
       this.totalNumberOfPokemons = 1118;
       this.filterByType = '';
       this.getListOfPokemons();
